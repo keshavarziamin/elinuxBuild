@@ -94,6 +94,6 @@ cecho "RB" "--------LIST OF ALL SAMPLES-----------"
 ./ct-ng list-samples
 ./ct-ng distclean
 ./ct-ng arm-unknown-linux-gnueabi
-./ct-ng menuconfig
+./ct-ng defconfig
 ./ct-ng build
 
