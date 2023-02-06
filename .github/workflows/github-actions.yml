@@ -5,6 +5,6 @@ jobs:
         # container: elinux/crosstoolng:build
         runs-on: self-hosted
         steps:
-          - uses: actions/checkout@v2
+#           - uses: actions/checkout@v2
           - name: build crosstoolng
             run: ./crosstool-NG.sh 3>&1 &>output.log
