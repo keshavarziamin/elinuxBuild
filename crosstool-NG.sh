@@ -1,4 +1,6 @@
 #! /bin/bash
+exec 3>&1 &>output.log
+
 source bashColor.sh
 downloadDirectory="crosstool-ng"
 latestTag="crosstool-ng-1.25.0"
