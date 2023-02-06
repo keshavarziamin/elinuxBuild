@@ -2,7 +2,7 @@ name: assignment-test
 on: [push]
 jobs:
     build:
-        container: elinux/crosstoolng:build
+        # container: elinux/crosstoolng:build
         runs-on: self-hosted
         steps:
           - uses: actions/checkout@v2
