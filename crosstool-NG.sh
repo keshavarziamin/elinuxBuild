@@ -23,6 +23,7 @@ function download_crosstoolsNG() {
     cecho "Y" "DOWNLOADING CROSSTOOLSNG STARTED"
     if [ ! -d ${downloadDirectory} ]; then
         git clone https://github.com/crosstool-ng/crosstool-ng.git
+        
         if [ $? != 0 ]; then
             cecho "RB" "DOWNLOADING AND INSTALLING ESSENTIAL PACKAGES FAILED."
             exit 1
@@ -36,6 +37,7 @@ function download_crosstoolsNG() {
 function build_crosstoolNG_changeCheckout() {
     cecho "BB" "CHANIGNG CHECKOUT TO ${latestTag}"
     git checkout ${latestTag}
+    jkljlkjlkj
     if [ $? != 0 ]; then
         cecho "RB" "CHANIGNG CHECKOUT TO ${latestTag} FAILED."
         exit 1
