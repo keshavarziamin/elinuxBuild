@@ -30,5 +30,5 @@ NC='\033[0m' # No Color
 
 cecho ()
 {
-    echo -e "\n${!1}${2} ${NC}\n"
+    echo -e "\n${!1}${2} ${NC}\n" >&3
 }
