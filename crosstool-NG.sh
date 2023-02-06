@@ -7,7 +7,7 @@ function download_essential_packages() {
 
     cecho "Y" "DOWNLOADING AND INSTALLING ESSENTIAL PACKAGES STARTED."
 
-    sudo apt install automake bison chrpath flex g++ git gperf gawk libexpat1-dev libncurses5-dev libsdl1.2-dev libtool python2.7-dev texinfo
+    apt install automake bison chrpath flex g++ git gperf gawk libexpat1-dev libncurses5-dev libsdl1.2-dev libtool python2.7-dev texinfo
 
     if [ $? != 0 ]; then
         cecho "RB" "DOWNLOADING AND INSTALLING ESSENTIAL PACKAGES FAILED."
@@ -63,12 +63,12 @@ function build_crosstoolNG_configure() {
 
 function build_crosstoolNG_make() {
     cecho "Y" " MAKEING CROSSTOOLNG STARTED"
-    sudo make
+    make
     if [ $? != 0 ]; then
         cecho "RB" "MAKEING CROSSTOOLNG FAILED."
         exit 1
     fi
-    sudo make install
+    make install
     if [ $? != 0 ]; then
         cecho "RB" "MAKEING CROSSTOOLNG FAILED."
         exit 1
