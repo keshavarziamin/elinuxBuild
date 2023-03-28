@@ -1,5 +1,5 @@
 #! /bin/bash
-exec 3>&1 &>output.log
+# exec 3>&1 &>output.log
 
 source bashColor.sh
 downloadDirectory="crosstool-ng"
@@ -8,8 +8,10 @@ latestTag="crosstool-ng-1.25.0"
 function download_essential_packages() {
 
     cecho "Y" "DOWNLOADING AND INSTALLING ESSENTIAL PACKAGES STARTED."
-
-    sudo apt install automake bison chrpath flex g++ git gperf gawk libexpat1-dev libncurses5-dev libsdl1.2-dev libtool python2.7-dev texinfo
+    sudo apt update -y 
+    sudo apt upgrade -y
+    sudo apt install -y help2man libtool-bin libtool-doc
+    sudo apt install -y automake bison chrpath flex g++ git gperf gawk libexpat1-dev libncurses5-dev libsdl1.2-dev libtool python2.7-dev texinfo
 
     if [ $? != 0 ]; then
         cecho "RB" "DOWNLOADING AND INSTALLING ESSENTIAL PACKAGES FAILED."
@@ -37,7 +39,7 @@ function download_crosstoolsNG() {
 function build_crosstoolNG_changeCheckout() {
     cecho "BB" "CHANIGNG CHECKOUT TO ${latestTag}"
     git checkout ${latestTag}
-    jkljlkjlkj
+
     if [ $? != 0 ]; then
         cecho "RB" "CHANIGNG CHECKOUT TO ${latestTag} FAILED."
         exit 1
