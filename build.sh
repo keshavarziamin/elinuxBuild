@@ -21,20 +21,18 @@ function build_run() {
         usage
         exit 1
     fi
-    echo $1
-    echo $2
     case $1 in
     $YP)
-        yocto_build $2
         echo "yocto ${2}"
+        yocto_build $2
         ;;
     $BR)
-        buildroot_build $2
         echo "buildroot ${2}"
+        buildroot_build $2
         ;;
     $MB)
-        manual_build $2
         echo "manualbuild ${2}"
+        manual_build $2
         ;;
     esac
 

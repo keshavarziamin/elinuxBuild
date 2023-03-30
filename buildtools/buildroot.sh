@@ -17,7 +17,7 @@ function buildroot_clone() {
 
 }
 
-function buildroot_makequem() {
+function buildroot_make() {
 
     cd buildroot
     echo "switch to 2022.11.2 tag "
@@ -28,3 +28,17 @@ function buildroot_makequem() {
     fi
 }
 
+function buildroot_build() {
+    buildroot_clone
+    ret=$?
+    if [$ret != 0 ]; then
+        exit 1
+    fi
+
+    buildroot_make $1
+    ret=$?
+    if [$ret != 0 ]; then
+        exit 1
+    fi
+    exit 0 
+}
