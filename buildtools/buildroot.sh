@@ -16,6 +16,7 @@ function buildroot_clone() {
     fi
 
 }
+
 function buildroot_makequem() {
 
     cd buildroot
@@ -23,8 +24,7 @@ function buildroot_makequem() {
     git checkout 2022.11.2
     if [ ! -e ${CONFIG_FILE} ]; then
         echo "making defconfig"
-        make qemu_aarch64_virt_defconfig
+        make ${1}
     fi
 }
-buildroot_clone
-buildroot_makequem
+
