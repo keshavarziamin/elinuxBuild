@@ -30,16 +30,19 @@ function buildroot_make() {
 }
 
 function buildroot_build() {
+    echo "cloneing buildroot sources --> start" >> result.out
     buildroot_clone
     ret=$?
     if [ $ret != 0 ]; then
         exit 1
     fi
-
+    echo "cloneing buildroot sources --> succeeded" >> result.out
+    echo "making buildroot sources --> start" >> result.out
     buildroot_make $1
     ret=$?
     if [ $ret != 0 ]; then
         exit 1
     fi
+    echo "making buildroot sources --> succeeded" >> result.out
     exit 0 
 }

@@ -1,5 +1,7 @@
 #! /bin/bash
 
+exec 3>&1 1>>log.out 2>&1
+
 source buildtools/listboars.sh
 source buildtools/buildroot.sh
 source buildtools/install_essential.sh
@@ -70,9 +72,20 @@ while getopts ":b:d:l" option; do
     esac
 done
 
-echo "install essential libraries"
-install_essential
-echo "start building $BUILD_SYSTEM $BOARD"
+
+
+echo "install essential libraries --> start" >> result.out 
+install_essential 
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+echo "install essential libraries --> succeeded" >> result.out
+
+echo "building --> start" >> result.out 
 build_run $BUILD_SYSTEM $BOARD
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+echo "building  --> succeeded" >> result.out
 
 exit 0

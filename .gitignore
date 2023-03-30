@@ -1,3 +1,5 @@
 actions-runner
 crosstool-ng
 output.log
+log.out
+result.out
