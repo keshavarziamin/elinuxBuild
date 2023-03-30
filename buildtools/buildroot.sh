@@ -24,25 +24,12 @@ function buildroot_make() {
     git checkout 2022.11.2
     if [ ! -e ${CONFIG_FILE} ]; then
         echo "making defconfig"
-        make ${1}
-        make
+        debug make ${1}
+        debug make -j4
     fi
 }
 
 function buildroot_build() {
-    echo "cloneing buildroot sources --> start" >> result.out
-    buildroot_clone
-    ret=$?
-    if [ $ret != 0 ]; then
-        exit 1
-    fi
-    echo "cloneing buildroot sources --> succeeded" >> result.out
-    echo "making buildroot sources --> start" >> result.out
-    buildroot_make $1
-    ret=$?
-    if [ $ret != 0 ]; then
-        exit 1
-    fi
-    echo "making buildroot sources --> succeeded" >> result.out
-    exit 0 
+    debug buildroot_clone
+    debug buildroot_make $1
 }

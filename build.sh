@@ -1,7 +1,5 @@
 #! /bin/bash
-
-exec 3>&1 1>>log.out 2>&1
-
+source error_handler/errhdl.sh
 source buildtools/listboars.sh
 source buildtools/buildroot.sh
 source buildtools/install_essential.sh
@@ -21,7 +19,7 @@ function usage() {
 
 function build_run() {
     if [ $# -ne 2 ]; then
-        usage
+        usage 1>&3
         exit 1
     fi
     case $1 in
@@ -51,17 +49,11 @@ while getopts ":b:d:l" option; do
         BUILD_SYSTEM=$OPTARG
         ;;
     d)
-        checkBoard $OPTARG
-        ret=$?
-        if [ $ret != '0' ]; then
-            echo "the name of board is wrong."
-            cat $LIST_TEXT_DIR
-            exit 1
-        fi
+        debug checkBoard $OPTARG
         BOARD=$OPTARG
         ;;
     l)
-        cat $LIST_TEXT_DIR
+        cat $LIST_TEXT_DIR 1>&3
         echo
         exit 0
         ;;
@@ -72,20 +64,7 @@ while getopts ":b:d:l" option; do
     esac
 done
 
-
-
-echo "install essential libraries --> start" >> result.out 
-install_essential 
-if [ $? -ne 0 ]; then
-    exit 1
-fi
-echo "install essential libraries --> succeeded" >> result.out
-
-echo "building --> start" >> result.out 
-build_run $BUILD_SYSTEM $BOARD
-if [ $? -ne 0 ]; then
-    exit 1
-fi
-echo "building  --> succeeded" >> result.out
+debug install_essential
+debug build_run $BUILD_SYSTEM $BOARD
 
 exit 0
