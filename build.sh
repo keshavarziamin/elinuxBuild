@@ -2,6 +2,7 @@
 
 source buildtools/listboars.sh
 source buildtools/buildroot.sh
+source buildtools/install_essential.sh
 
 YP="yocto"
 BR="buildroot"
@@ -69,6 +70,9 @@ while getopts ":b:d:l" option; do
     esac
 done
 
+echo "install essential libraries"
+install_essential
+echo "start building $BUILD_SYSTEM $BOARD"
 build_run $BUILD_SYSTEM $BOARD
 
 exit 0

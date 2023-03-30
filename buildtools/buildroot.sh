@@ -25,19 +25,20 @@ function buildroot_make() {
     if [ ! -e ${CONFIG_FILE} ]; then
         echo "making defconfig"
         make ${1}
+        make
     fi
 }
 
 function buildroot_build() {
     buildroot_clone
     ret=$?
-    if [$ret != 0 ]; then
+    if [ $ret != 0 ]; then
         exit 1
     fi
 
     buildroot_make $1
     ret=$?
-    if [$ret != 0 ]; then
+    if [ $ret != 0 ]; then
         exit 1
     fi
     exit 0 
