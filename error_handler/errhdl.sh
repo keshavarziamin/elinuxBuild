@@ -7,6 +7,7 @@ function debug() {
     current_clock=
     tstart=$(date +%s)
     print "run ${1} >> ${G}START TIME: ${Y}$(date +"%T")${NC}\n"
+    
     func=${1}
     shift
     $func $@ #run function with other arguments
