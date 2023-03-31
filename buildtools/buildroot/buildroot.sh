@@ -14,7 +14,7 @@ SOURCE_TAG=2023.02
 
 function buildroot_printList() {
     num=1
-    print "\tBUILDROOT:\n" 
+    print "\tBUILDROOT:\n"
     for board_name in ${list[@]}; do
         print "\t\t$num: $board_name\n"
         num=$(($num + 1))
@@ -23,14 +23,22 @@ function buildroot_printList() {
 
 function buildroot_isBoradValid() {
 
-    for name in ${list[@]}; do
-        if [ $name = ${1} ]; then
-            return ${SUCCESS} # return vaild  
-        fi
-    done
+    cd ${BUILDROOT_SRC_DIR}
 
-    echo_err "Not found the board"
-    return ${ERROR} # return error if the name of board does not exit in list or is not valid.
+    boards_list=$(make list-defconfigs)
+    echo $boards_list
+    # return error if the name of board does not exit in list or is not valid.
+    grep -q "${1}" <<<$boards_list && return ${SUCCESS} || echo_return ${ERROR} "Not found the config"
+
+    cd ${ROOT_DIR}
+    # for name in ${list[@]}; do
+    #     if [ $name = ${1} ]; then
+    #         return ${SUCCESS} # return vaild
+    #     fi
+    # done
+
+    # echo_err "Not found the board"
+    # return ${ERROR}
 }
 
 function buildroot_cloneSource() {
@@ -52,11 +60,19 @@ function buildroot_cloneSource() {
 function buildroot_makeImage() {
 
     cd ${BUILDROOT_SRC_DIR}
+
     #check config folder
     if [ ! -e ${CONFIG_FILE} ]; then
+
         debug make ${1} # make config
-        debug make -j12 # make install
+
+        # You do not tell make how many parallel jobs to run with a -j option:
+        # Buildroot will make optimum use of your CPUs all by itself. If you want to
+        # limit the number of jobs, you can run make menuconfig and look under
+        # the Build options.
+        debug make # make install
     fi
+
     cd ${ROOT_DIR}
 }
 

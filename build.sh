@@ -11,7 +11,7 @@ MB="manual"
 LIST_TEXT_DIR="buildtools/list_of_boards.txt"
 
 BUILD_SYSTEM=""
-BOARD=""
+CONFIG=""
 
 function usage() {
     echo "USAGE: arguments in not valid "
@@ -29,7 +29,7 @@ function build_run() {
     case $1 in
     $BR)
         print "build system: buildroot\n"
-        print "board : ${2}\n"
+        print "CONFIG : ${2}\n"
         buildroot_buildKernel $2
         ;;
     *)
@@ -40,7 +40,7 @@ function build_run() {
 
 function get_options() {
 
-    while getopts "b:d:l" option; do
+    while getopts "b:c:l" option; do
 
         case $option in
         b)
@@ -50,9 +50,9 @@ function get_options() {
             fi
             BUILD_SYSTEM=$OPTARG
             ;;
-        d)
+        c)
             debug buildroot_isBoradValid $OPTARG
-            BOARD=$OPTARG
+            CONFIG=$OPTARG
             ;;
         l)
             print "The list of baords suppoeted\n" 
@@ -69,9 +69,10 @@ function get_options() {
 
 }
 
-get_options $@
 
+
+get_options $@
 # debug install_essential
-debug build_run $BUILD_SYSTEM $BOARD
+debug build_run $BUILD_SYSTEM $CONFIG
 
 exit 0
