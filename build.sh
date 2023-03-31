@@ -7,36 +7,33 @@ source buildtools/install_essential.sh
 YP="yocto"
 BR="buildroot"
 MB="manual"
+
+ERROR=1
+SUCCESS=0
+
 LIST_TEXT_DIR="buildtools/list_of_boards.txt"
 
 BUILD_SYSTEM=""
 BOARD=""
 
 function usage() {
-    echo "arguments in not valid "
+    echo "USAGE: arguments in not valid "
 
 }
 
 function build_run() {
     if [ $# -ne 2 ]; then
         usage 1>&3
-        exit 1
+        echo_return $ERROR "The arguments are wrongs"
     fi
     case $1 in
-    $YP)
-        echo "yocto ${2}"
-        yocto_build $2
-        ;;
     $BR)
         echo "buildroot ${2}"
         buildroot_build $2
         ;;
-    $MB)
-        echo "manualbuild ${2}"
-        manual_build $2
-        ;;
+    *)
+        echo_return $ERROR "please choose a correct build system"
     esac
-
 }
 
 while getopts ":b:d:l" option; do

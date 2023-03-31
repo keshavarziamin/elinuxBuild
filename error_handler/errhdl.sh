@@ -1,5 +1,6 @@
 #! /bin/bash
-exec 3>&1 1>>log.out 2>&1
+OUTPUT_LOG=log.out
+exec 3>&1 1>>$OUTPUT_LOG 2>&1
 
 source error_handler/bash_color.sh
 
@@ -7,7 +8,7 @@ function debug() {
     current_clock=
     tstart=$(date +%s)
     print "run ${1} >> ${G}START TIME: ${Y}$(date +"%T")${NC}\n"
-    
+
     func=${1}
     shift
     $func $@ #run function with other arguments
@@ -19,11 +20,11 @@ function debug() {
 }
 
 echo_info() {
-    print "${B}INFO${NC}" "${1}"
+    printl "${B}INFO${NC}" "${1}"
 }
 
 echo_err() {
-    echo -e "${R}ERROR${NC}" "${1}" >&3
+    printl "${R}ERROR${NC}" "${1}"
 }
 
 echo_failed() {
@@ -32,7 +33,7 @@ echo_failed() {
 
 echo_warnnig() {
 
-    print "${Y}WARNNIG${NC}" "${1}"
+    printl "${Y}WARNNIG${NC}" "${1}"
 }
 
 echo_success() {
@@ -44,9 +45,9 @@ echo_return() {
     err=${1}
     msg=${2}
     if [ ${err} != 0 ]; then
-        echo_failed "${msg}\n"
+        echo_failed "${msg}"
         echo_err "$0:$err"
-        echo_err "You can check the error in the ${Y}output.log${NC}"
+        echo_info "You can check the error in the ${Y}${OUTPUT_LOG}${NC}"
         exit ${err}
     fi
     echo_success "${msg}"
@@ -57,14 +58,13 @@ echoc() {
 }
 
 function printl() {
-    print ${1} ${2}
+    print "${1}" "${2}"
     printf "\n" >&3
 }
 
 function print() {
-
     printf "${1} " >&3
-    if [ $# -eq 3 ]; then
+    if [ $# -eq 2 ]; then
         printf ":: ${2} " >&3
     fi
 }
