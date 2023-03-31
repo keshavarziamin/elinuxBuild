@@ -1,15 +1,12 @@
 #! /bin/bash
-
-source error_handler/errhdl.sh
-source buildtools/buildroot/buildroot.sh
+BUILDROOT_DIR=buildtools/buildroot
+source ${BUILDROOT_DIR}/buildroot.sh
 source buildtools/install_essential.sh
 
 YP="yocto"
 BR="buildroot"
 MB="manual"
 
-ERROR=1
-SUCCESS=0
 
 LIST_TEXT_DIR="buildtools/list_of_boards.txt"
 
@@ -31,8 +28,9 @@ function build_run() {
     #select build system
     case $1 in
     $BR)
-        echo "buildroot ${2}"
-        buildroot_build $2
+        print "build system: buildroot\n"
+        print "board : ${2}\n"
+        buildroot_buildKernel $2
         ;;
     *)
         echo_return $ERROR "please choose a correct build system"
@@ -53,11 +51,12 @@ function get_options() {
             BUILD_SYSTEM=$OPTARG
             ;;
         d)
-            debug checkBoard $OPTARG
+            debug buildroot_isBoradValid $OPTARG
             BOARD=$OPTARG
             ;;
         l)
-            cat $LIST_TEXT_DIR 1>&3
+            print "The list of baords suppoeted\n" 
+            buildroot_printList
             exit 0
             ;;
         *)

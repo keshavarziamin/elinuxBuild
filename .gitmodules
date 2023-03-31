@@ -1,3 +1,3 @@
-[submodule "buildroot"]
-	path = builtools/buildroot/buildroot
+[submodule "buildtools/buildroot/src"]
+	path = buildtools/buildroot/src
 	url = git@github.com:buildroot/buildroot.git

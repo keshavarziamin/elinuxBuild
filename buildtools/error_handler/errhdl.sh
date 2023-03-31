@@ -1,14 +1,17 @@
 #! /bin/bash
 OUTPUT_LOG=log.out
-exec 3>&1 1>>$OUTPUT_LOG 2>&1
+exec 3>&1 &>>$OUTPUT_LOG
 
-source error_handler/bash_color.sh
+ERROR_HANDLE_DIR=buildtools/error_handler
+source ${ERROR_HANDLE_DIR}/bash_color.sh
+
+ERROR=1
+SUCCESS=0
 
 function debug() {
     current_clock=
     tstart=$(date +%s)
     print "run ${1} >> ${G}START TIME: ${Y}$(date +"%T")${NC}\n"
-
     func=${1}
     shift
     $func $@ #run function with other arguments
@@ -44,7 +47,7 @@ echo_success() {
 echo_return() {
     err=${1}
     msg=${2}
-    if [ ${err} != 0 ]; then
+    if [ ${err} != ${SUCCESS} ]; then
         echo_failed "${msg}"
         echo_err "$0:$err"
         echo_info "You can check the error in the ${Y}${OUTPUT_LOG}${NC}"
