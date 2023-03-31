@@ -1,11 +1,11 @@
 #!/bin/bash
 ROOT_DIR=$(pwd)
 BUILDROOT_DIR=buildtools/buildroot
-BUIDROOT_BOARDS_DIR=${BUILDROOT_DIR}/boards
+# BUIDROOT_BOARDS_DIR=${BUILDROOT_DIR}/boards
 BUILDROOT_SRC_DIR=${BUILDROOT_DIR}/src
 ERROR_HANDLE_DIR=buildtools/error_handler
 
-source ${BUIDROOT_BOARDS_DIR}/listboards.sh
+# source ${BUIDROOT_BOARDS_DIR}/listboards.sh
 source ${ERROR_HANDLE_DIR}/errhdl.sh
 
 CONFIG_FILE=${BUILDROOT_SRC_DIR}/.config

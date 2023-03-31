@@ -7,7 +7,6 @@ YP="yocto"
 BR="buildroot"
 MB="manual"
 
-
 LIST_TEXT_DIR="buildtools/list_of_boards.txt"
 
 BUILD_SYSTEM=""
@@ -42,7 +41,7 @@ function build_run() {
 
 function get_options() {
 
-    while getopts "b:c:l" option; do
+    while getopts "b:c:l:" option; do
 
         case $option in
         b)
@@ -57,11 +56,20 @@ function get_options() {
             CONFIG=$OPTARG
             ;;
         l)
-            print "The list of baords suppoeted\n" 
-            cd ${BUILDROOT_SRC_DIR}
-            buildroot_printList
-            cd ${ROOT_DIR}
-            exit 0
+            print "The list of baords suppoeted\n"
+            case $OPTARG in
+            $BR)
+                cd ${BUILDROOT_SRC_DIR}
+                buildroot_printList
+                cd ${ROOT_DIR}
+                exit 0
+                ;;
+            *)
+                echo_err "invalid arguments"
+                usage
+                exit 1
+                ;;
+            esac
             ;;
         *)
             echo_err "invalid arguments"
@@ -72,8 +80,6 @@ function get_options() {
     done
 
 }
-
-
 
 get_options $@
 # debug install_essential
