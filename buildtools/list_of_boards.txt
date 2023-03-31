@@ -1,9 +1,0 @@
-
-# please choose only one of the following boards
-
-VIRTUAL LINUX BOARDS:
-    1- qemu_aarch64_virt_defconfig 
-
-RASPBERRY PI BOARDS:
-    1- RPI4B2       # board = raspberry pi 4 B2 
-
