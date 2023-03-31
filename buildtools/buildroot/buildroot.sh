@@ -13,32 +13,22 @@ CONFIG_FILE=${BUILDROOT_SRC_DIR}/.config
 SOURCE_TAG=2023.02
 
 function buildroot_printList() {
-    num=1
+
+    # get list on boards config from buildroot
     print "\tBUILDROOT:\n"
-    for board_name in ${list[@]}; do
-        print "\t\t$num: $board_name\n"
-        num=$(($num + 1))
-    done
+    make list-defconfigs 1>&3
 }
 
 function buildroot_isBoradValid() {
 
-    cd ${BUILDROOT_SRC_DIR}
+    # get list on boards config from buildroot
+    config_list=$(make list-defconfigs)
 
-    boards_list=$(make list-defconfigs)
-    echo $boards_list
-    # return error if the name of board does not exit in list or is not valid.
-    grep -q "${1}" <<<$boards_list && return ${SUCCESS} || echo_return ${ERROR} "Not found the config"
+    # search name of config in the list and return status
+    grep -q "${1}" <<<$config_list && return ${SUCCESS} || echo_return ${ERROR} "Not found the config"
 
     cd ${ROOT_DIR}
-    # for name in ${list[@]}; do
-    #     if [ $name = ${1} ]; then
-    #         return ${SUCCESS} # return vaild
-    #     fi
-    # done
 
-    # echo_err "Not found the board"
-    # return ${ERROR}
 }
 
 function buildroot_cloneSource() {
@@ -47,14 +37,11 @@ function buildroot_cloneSource() {
     print "start updating source files of buildroot\n"
     git submodule update --init --remote ${BUILDROOT_SRC_DIR} 1>&3
 
-    # go to source folder
-    cd ${BUILDROOT_SRC_DIR}
 
     #chang checkout to a tag version
     echo "switch buildroot source files to ${SOURCE_TAG} veriosn" 1>&3
     git checkout ${SOURCE_TAG} 1>&3
 
-    cd ${ROOT_DIR}
 }
 
 function buildroot_makeImage() {

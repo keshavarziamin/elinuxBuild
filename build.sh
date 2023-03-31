@@ -30,7 +30,9 @@ function build_run() {
     $BR)
         print "build system: buildroot\n"
         print "CONFIG : ${2}\n"
+        cd ${BUILDROOT_SRC_DIR}
         buildroot_buildKernel $2
+        cd ${ROOT_DIR}
         ;;
     *)
         echo_return $ERROR "please choose a correct build system"
@@ -56,7 +58,9 @@ function get_options() {
             ;;
         l)
             print "The list of baords suppoeted\n" 
+            cd ${BUILDROOT_SRC_DIR}
             buildroot_printList
+            cd ${ROOT_DIR}
             exit 0
             ;;
         *)
