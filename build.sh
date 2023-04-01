@@ -3,15 +3,6 @@ BUILDROOT_DIR=buildtools/buildroot
 source ${BUILDROOT_DIR}/buildroot.sh
 source buildtools/install_essential.sh
 
-YP="yocto"
-BR="buildroot"
-MB="manual"
-
-LIST_TEXT_DIR="buildtools/list_of_boards.txt"
-
-BUILD_SYSTEM=""
-CONFIG=""
-MENUCONFIG=""
 
 function usage() {
     echo "USAGE: arguments in not valid "
