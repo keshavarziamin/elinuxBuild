@@ -37,6 +37,7 @@ function buildroot_cloneSource() {
     print "start updating source files of buildroot\n"
     git submodule update --init --remote ${BUILDROOT_SRC_DIR} 1>&3
 
+
     #chang checkout to a tag version
     echo "switch buildroot source files to ${SOURCE_TAG} veriosn" 1>&3
     git checkout ${SOURCE_TAG} 1>&3
@@ -44,6 +45,8 @@ function buildroot_cloneSource() {
 }
 
 function buildroot_makeImage() {
+
+   
 
     #check config folder
     if [ ! -e ${CONFIG_FILE} ]; then
@@ -57,6 +60,7 @@ function buildroot_makeImage() {
         debug make ${2} # make install
     fi
 
+    
 }
 
 function buildroot_buildKernel() {
@@ -64,31 +68,4 @@ function buildroot_buildKernel() {
     buildroot_cloneSource # add submodule or update submodule
     debug buildroot_makeImage $1 $2
 
-}
-
-function buildroot_run() {
-
-    # get arguments
-    VALID_ARGS=$(getopt -o lc:m --long list,config,menu -- "$@")
-
-    if [ $? -ne 0 ]; then
-        echo_err "the arguments are not valid"
-        usage
-        exit ${ERROR}
-    fi
-
-
-    #select build system
-    case $1 in
-    $BR)
-        print "build system: buildroot\n"
-        print "CONFIG : ${2}\n"
-        cd ${BUILDROOT_SRC_DIR}
-        buildroot_buildKernel $2
-        cd ${ROOT_DIR}
-        ;;
-    *)
-        echo_return $ERROR "please choose a correct build system"
-        ;;
-    esac
 }
