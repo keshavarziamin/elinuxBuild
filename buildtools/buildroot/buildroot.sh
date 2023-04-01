@@ -12,6 +12,8 @@ CONFIG_FILE=${BUILDROOT_SRC_DIR}/.config
 
 SOURCE_TAG=2023.02
 
+LIST_FLAG=""
+BUILD_FLAG=""
 BUILDROOT_CONFIG=""
 BUILDROOT_MENU=""
 
@@ -28,9 +30,8 @@ function buildroot_isConfigValid() {
     config_list=$(make list-defconfigs)
 
     # search name of config in the list and return status
-    grep -q "${1}" <<<$config_list && return ${SUCCESS} || echo_return ${ERROR} "Not found the config"
-
-    cd ${ROOT_DIR}
+    # w is used to sereach whole word
+    grep -qw "$1" <<<$config_list && return ${SUCCESS} || echo_return ${ERROR} "Not found the config"
 
 }
 
@@ -49,15 +50,26 @@ function buildroot_cloneSource() {
 function buildroot_makeImage() {
 
     #check config folder
+
     if [ ! -e ${CONFIG_FILE} ]; then
 
-        debug make ${1} # make config
+        echo_info "start making config"
+
+        debug make $1 # make config according to config
+
+        # start menuconfig
+        if [ $2 = "true" ]; then
+            echo_info "run menuconfig to set new configuration."
+            make menuconfig 1>&3 # open menu config in teminal
+            echo_info "save new configuration."
+        fi
 
         # You do not tell make how many parallel jobs to run with a -j option:
         # Buildroot will make optimum use of your CPUs all by itself. If you want to
         # limit the number of jobs, you can run make menuconfig and look under
         # the Build options.
-        debug make ${2} # make install
+
+        debug make
     fi
 
 }
@@ -72,7 +84,7 @@ function buildroot_buildKernel() {
 function buildroot_run() {
 
     # get arguments
-    BR_VALID_ARGS=$(getopt -o lc:m --long config,menu -- "$@")
+    BR_VALID_ARGS=$(getopt -o lc: --long list,config: -- "$@")
 
     if [ $? -ne 0 ]; then
         echo_err "buildroot: the arguments are not valid"
@@ -80,33 +92,76 @@ function buildroot_run() {
         exit ${ERROR}
     fi
 
-    while [ : ]; do
-
+    while [ $# -ne 0 ]; do
         case $1 in
 
+        --) ;; #ignore this argumnet
+
         -l | --list) # print list of configs
-            buildroot_printList
-            exit ${SUCCESS}
+            LIST_FLAG="true"
             ;;
 
         -c | --config) #select config accordings to list
-            BUILDROOT_CONFIG=$2
-            debug buildroot_isConfigValid $BUILDROOT_CONFIG
             shift
+            while [ $# -ne 0 ]; do
+
+                case $1 in
+
+                --) ;; #ignore this argumnet
+
+                menuconfig)
+                    BUILDROOT_MENU="true"
+                    print "start; $BUILDROOT_MENU\n"
+                    ;;
+
+                *)
+                    if [ $1 != "" ]; then
+
+                        BUILDROOT_CONFIG=$1
+                        BUILD_FLAG="true"
+
+                    fi
+                    ;;
+
+                : | \?)
+                    echo_err "Buildroot: The arguments are not valid"
+                    exit ${ERROR}
+                    ;;
+                esac
+                shift
+            done
             ;;
 
-        -m | --menu) #select menuconfig
-            BUILDROOT_MENU="menuconfig"
-            shift
+        : | *)
+            echo_err "Buildroot: The arguments are not valid"
+            exit ${ERROR}
             ;;
+
         esac
+        shift
     done
 
+    # goto to buildroot source code path
     cd ${BUILDROOT_SRC_DIR}
 
-    print "starting building image with buildroot\n"
-    debug buildroot_buildKernel $BUILDROOT_CONFIG $BUILDROOT_MENU
+    #print list on board and device configs that are supported with buildroot
+    if [ $LIST_FLAG = "true" ]; then
 
+        buildroot_printList
+        exit ${SUCCESS}
+
+    fi
+
+    if [ $BUILD_FLAG = "true" ]; then
+
+        debug buildroot_isConfigValid $BUILDROOT_CONFIG
+        echo_info "starting building image with buildroot"
+        print "df: $BUILDROOT_MENU\n"
+        debug buildroot_buildKernel $BUILDROOT_CONFIG $BUILDROOT_MENU
+
+    fi
+
+    # return to project path
     cd ${ROOT_DIR}
 
 }
