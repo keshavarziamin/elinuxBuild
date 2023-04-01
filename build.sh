@@ -11,6 +11,7 @@ LIST_TEXT_DIR="buildtools/list_of_boards.txt"
 
 BUILD_SYSTEM=""
 CONFIG=""
+MENUCONFIG=""
 
 function usage() {
     echo "USAGE: arguments in not valid "
@@ -41,29 +42,45 @@ function build_run() {
 
 function get_options() {
 
-    while getopts "b:c:l:" option; do
+    while getopts ":b:c:l:" option; do
+
+        set -f;
+        listarg=($2) #get list of arguments
 
         case $option in
-        b)
+
+        b) # build
             if [ $OPTARG != $YP ] && [ $OPTARG != $BR ] && [ $OPTARG != $MB ]; then
                 usage
                 exit 1
             fi
             BUILD_SYSTEM=$OPTARG
             ;;
-        c)
-            debug buildroot_isBoradValid $OPTARG
-            CONFIG=$OPTARG
+
+        c) # config
+            # debug buildroot_isBoradValid "\${$((OPTIND))}"
+            CONFIG=$((OPTIND))
+            # shift
+            # MENUCONFIG=$OPTARG
+            # for i in $OPTARG;do
+            # printl $i
+            # done
+            printl "${$CONFIG}\n"
+            exit 0
             ;;
-        l)
+
+        l) # list of configs
             print "The list of baords suppoeted\n"
+
             case $OPTARG in
+
             $BR)
                 cd ${BUILDROOT_SRC_DIR}
                 buildroot_printList
                 cd ${ROOT_DIR}
                 exit 0
                 ;;
+
             *)
                 echo_err "invalid arguments"
                 usage
@@ -71,7 +88,8 @@ function get_options() {
                 ;;
             esac
             ;;
-        *)
+
+        * | :)
             echo_err "invalid arguments"
             usage
             exit 1
@@ -83,6 +101,7 @@ function get_options() {
 
 get_options $@
 # debug install_essential
-debug build_run $BUILD_SYSTEM $CONFIG
-
+# cd ${BUILDROOT_SRC_DIR}
+# debug build_run $BUILD_SYSTEM $CONFIG $MENUCONFIG
+# cd ${ROOT_DIR}
 exit 0

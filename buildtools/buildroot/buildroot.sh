@@ -46,7 +46,7 @@ function buildroot_cloneSource() {
 
 function buildroot_makeImage() {
 
-    cd ${BUILDROOT_SRC_DIR}
+   
 
     #check config folder
     if [ ! -e ${CONFIG_FILE} ]; then
@@ -57,15 +57,15 @@ function buildroot_makeImage() {
         # Buildroot will make optimum use of your CPUs all by itself. If you want to
         # limit the number of jobs, you can run make menuconfig and look under
         # the Build options.
-        debug make # make install
+        debug make ${2} # make install
     fi
 
-    cd ${ROOT_DIR}
+    
 }
 
 function buildroot_buildKernel() {
 
     buildroot_cloneSource # add submodule or update submodule
-    debug buildroot_makeImage $1
+    debug buildroot_makeImage $1 $2
 
 }
