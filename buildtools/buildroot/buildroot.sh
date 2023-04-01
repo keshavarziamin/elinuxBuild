@@ -12,6 +12,9 @@ CONFIG_FILE=${BUILDROOT_SRC_DIR}/.config
 
 SOURCE_TAG=2023.02
 
+BUILDROOT_CONFIG=""
+BUILDROOT_MENU=""
+
 function buildroot_printList() {
 
     # get list on boards config from buildroot
@@ -19,7 +22,7 @@ function buildroot_printList() {
     make list-defconfigs 1>&3
 }
 
-function buildroot_isBoradValid() {
+function buildroot_isConfigValid() {
 
     # get list on boards config from buildroot
     config_list=$(make list-defconfigs)
@@ -37,7 +40,6 @@ function buildroot_cloneSource() {
     print "start updating source files of buildroot\n"
     git submodule update --init --remote ${BUILDROOT_SRC_DIR} 1>&3
 
-
     #chang checkout to a tag version
     echo "switch buildroot source files to ${SOURCE_TAG} veriosn" 1>&3
     git checkout ${SOURCE_TAG} 1>&3
@@ -45,8 +47,6 @@ function buildroot_cloneSource() {
 }
 
 function buildroot_makeImage() {
-
-   
 
     #check config folder
     if [ ! -e ${CONFIG_FILE} ]; then
@@ -60,12 +60,53 @@ function buildroot_makeImage() {
         debug make ${2} # make install
     fi
 
-    
 }
 
 function buildroot_buildKernel() {
 
     buildroot_cloneSource # add submodule or update submodule
     debug buildroot_makeImage $1 $2
+
+}
+
+function buildroot_run() {
+
+    # get arguments
+    VALID_ARGS=$(getopt -o lc:m --long list,config,menu -- "$@")
+
+    if [ $? -ne 0 ]; then
+        echo_err "the arguments are not valid"
+        usage
+        exit ${ERROR}
+    fi
+
+    while [ : ]; do
+
+        case $1 in
+
+        -l | --list) # print list of configs
+            buildroot_printList
+            exit ${SUCCESS}
+            ;;
+
+        -c | --config) #select config accordings to list
+            BUILDROOT_CONFIG=$2
+            debug buildroot_isConfigValid $BUILDROOT_CONFIG
+            shift
+            ;;
+
+        -m | --menu) #select menuconfig
+            BUILDROOT_MENU="menuconfig"
+            shift
+            ;;
+        esac
+    done
+
+    cd ${BUILDROOT_SRC_DIR}
+
+    print "starting building image with buildroot\n"
+    debug buildroot_buildKernel $BUILDROOT_CONFIG $BUILDROOT_MENU
+
+    cd ${ROOT_DIR}
 
 }
