@@ -72,10 +72,10 @@ function buildroot_buildKernel() {
 function buildroot_run() {
 
     # get arguments
-    VALID_ARGS=$(getopt -o lc:m --long list,config,menu -- "$@")
+    BR_VALID_ARGS=$(getopt -o lc:m --long config,menu -- "$@")
 
     if [ $? -ne 0 ]; then
-        echo_err "the arguments are not valid"
+        echo_err "buildroot: the arguments are not valid"
         usage
         exit ${ERROR}
     fi
