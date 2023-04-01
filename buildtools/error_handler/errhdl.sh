@@ -66,8 +66,8 @@ function printl() {
 }
 
 function print() {
-    printf "${1} " >&3
+    printf "${1}" >&3
     if [ $# -eq 2 ]; then
-        printf ":: ${2} " >&3
+        printf " :: ${2} " >&3
     fi
 }
