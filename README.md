@@ -1,11 +1,19 @@
 # Embedded Linux builder
 
-The elinuxbuild (Embedded Linux builder) is an open-source project building embedded Linux with [Buildroot](https://github.com/buildroot/buildroot/tree/8cca1e6de1c69a0a5e876116906bb3f6da4a5bd5). **Yocto and the manual building will be added to the project in the next versions.**  The main project's goal is building, making and testing Linux images, libraries, and packages. 
+The Embedded Linux Builder (elinuxbuild) is an open-source project that uses Buildroot to build embedded Linux systems. Currently, the project focuses on making, building, and testing Linux images, packages, and libraries. In future versions, Yocto and manual building will also be supported.
+
+
+
+
+## Docker
+A [Dockerfile](https://github.com/keshavarziamin/elinuxBuild/blob/main/Dockerfile) is available for easy deployment of elinuxbuild. You can find it on [Docker-Hub](https://hub.docker.com/repository/docker/keshavarziamin/elinuxbuild/general) or in the project repository. 
 
 ## License
-[GPLv2](https://github.com/keshavarziamin/elinuxBuild/blob/main/LICENSE)
+Elinuxbuild is licensed under the GPL-2.0 license. You can find the full text of the license in the [LICENSE](https://github.com/keshavarziamin/elinuxBuild/blob/main/LICENSE) file.
 
 ## Usage
+To use elinuxbuild, run the following command:
+
 ```
 Usage: $0 [-B|--buildroot <config>] [-c|--config <config>] [menuconfig]
 Usage: $0 [-B|--buildroot] <-C|--clean>
