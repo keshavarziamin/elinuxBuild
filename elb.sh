@@ -4,14 +4,30 @@ source ${BUILDROOT_DIR}/buildroot.sh
 source buildtools/install_essential.sh
 
 function usage() {
-    echo "USAGE: arguments in not valid "
+    echo
+    echo "Usage: $0 [-B|--buildroot <config>] [-c|--config <config>] [menuconfig]"
+    echo
+    echo "Usage: $0 [-B|--buildroot] <-l|--list>"
+    echo
+    echo "Options:"
+    echo "-B, --buildroot   Build the root filesystem"
+    echo "-c, --config      Build the specified configuration"
+    echo "-l, --list        List the supported configurations"
+    echo "menuconfig        Show menu configuration"
+    echo
+    echo "Examples:"
+    echo "$0 --buildroot --config my_config"
+    echo "$0 -B -c my_config menuconfig"
+    echo "$0 -B -l"
+    echo "$0 -B --list"
+    echo
 }
 
 VALID_ARGS=$(getopt -o :B: --long buildroot: -- "$@")
 
 if [ $? -ne 0 ]; then
-    echo_err "the arguments are not valid"
-    usage
+    echo_err "The arguments are not valid"
+    usage 1>&3
     exit ${ERROR}
 fi
 
@@ -24,7 +40,7 @@ case "$1" in
     ;;
 : | * | \?)
     echo_err "The arguments are not valid"
-    usage
+    usage 1>&3
     exit ${ERROR}
     ;;
 esac
