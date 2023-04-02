@@ -6,20 +6,22 @@ source buildtools/install_essential.sh
 function usage() {
     echo
     echo "Usage: $0 [-B|--buildroot <config>] [-c|--config <config>] [menuconfig]"
-    echo
+    echo "Usage: $0 [-B|--buildroot] <-C|--clean>" 
     echo "Usage: $0 [-B|--buildroot] <-l|--list>"
     echo
     echo "Options:"
     echo "-B, --buildroot   Build the root filesystem"
     echo "-c, --config      Build the specified configuration"
     echo "-l, --list        List the supported configurations"
+    echo "-C, --clean       remove all output fiels and images
     echo "menuconfig        Show menu configuration"
     echo
     echo "Examples:"
     echo "$0 --buildroot --config my_config"
     echo "$0 -B -c my_config menuconfig"
     echo "$0 -B -l"
-    echo "$0 -B --list"
+    echo "$0 -B --list" 
+    echo "$0 -B --clean" 
     echo
 }
 
