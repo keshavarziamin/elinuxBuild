@@ -20,9 +20,9 @@ Elinuxbuild is licensed under the GPL-2.0 license. You can find the full text of
 To use elinuxbuild, run the following command:
 
 ```
-Usage: $0 [-B|--buildroot <config>] [-c|--config <config>] [menuconfig]
-Usage: $0 [-B|--buildroot] <-C|--clean>
-Usage: $0 [-B|--buildroot] <-l|--list>
+Usage: ./elb.sh [-B|--buildroot <config>] [-c|--config <config>] [menuconfig]
+Usage: ./elb.sh [-B|--buildroot] <-C|--clean>
+Usage: ./elb.sh [-B|--buildroot] <-l|--list>
 Options:
 -B, --buildroot   Build the root filesystem
 -c, --config      Build the specified configuration
@@ -30,9 +30,9 @@ Options:
 -C, --clean       remove all output fiels and images
 menuconfig        Show menu configuration
 Examples:
-$0 --buildroot --config my_config
-$0 -B -c my_config menuconfig
-$0 -B -l
-$0 -B --list
-$0 -B --clean
+./elb.sh --buildroot --config my_config
+./elb.sh-B -c my_config menuconfig
+./elb.sh -B -l
+./elb.sh -B --list
+./elb.sh -B --clean
 ```
