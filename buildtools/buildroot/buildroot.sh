@@ -12,10 +12,22 @@ CONFIG_FILE=${BUILDROOT_SRC_DIR}/.config
 
 SOURCE_TAG=2023.02
 
+CLEAN_FLAG=""
 LIST_FLAG=""
 BUILD_FLAG=""
+
 BUILDROOT_CONFIG=""
 BUILDROOT_MENU=""
+
+function buildroot_cleanImage() {
+
+    if [ -d output ]; then
+        rm -rf output/target
+        find output/ -name ".stamp_target_installed" -delete
+        rm -f output/build/host-gcc-final-*/.stamp_host_installed
+        rm -rf output/*
+    fi
+}
 
 function buildroot_printList() {
 
@@ -58,7 +70,7 @@ function buildroot_makeImage() {
         debug make $1 # make config according to config
 
         # start menuconfig
-        if [ $2 = "true" ]; then
+        if [ $2 = true ]; then
             echo_info "run menuconfig to set new configuration."
             make menuconfig 1>&3 # open menu config in teminal
             echo_info "save new configuration."
@@ -84,7 +96,7 @@ function buildroot_buildKernel() {
 function buildroot_getopts() {
 
     # get arguments
-    BR_VALID_ARGS=$(getopt -o lc: --long list,config: -- "$@")
+    BR_VALID_ARGS=$(getopt -o lc:C --long list,config,clean: -- "$@")
 
     if [ $? -ne 0 ]; then
         echo_err "buildroot: the arguments are not valid"
@@ -98,7 +110,10 @@ function buildroot_getopts() {
         --) ;; #ignore this argumnet
 
         -l | --list) # print list of configs
-            LIST_FLAG="true"
+            LIST_FLAG=true
+            ;;
+        -C | --clean)
+            CLEAN_FLAG=true
             ;;
 
         -c | --config) #select config accordings to list
@@ -110,7 +125,7 @@ function buildroot_getopts() {
                 --) ;; #ignore this argumnet
 
                 menuconfig)
-                    BUILDROOT_MENU="true"
+                    BUILDROOT_MENU=true
                     print "start; $BUILDROOT_MENU\n"
                     ;;
 
@@ -118,7 +133,7 @@ function buildroot_getopts() {
                     if [ $1 != "" ]; then
 
                         BUILDROOT_CONFIG=$1
-                        BUILD_FLAG="true"
+                        BUILD_FLAG=true
 
                     fi
                     ;;
@@ -151,15 +166,21 @@ function buildroot_run() {
     # goto to buildroot source code path
     cd ${BUILDROOT_SRC_DIR}
 
+    if $CLEAN_FLAG; then
+        echo_info "start removing images files"
+        debug buildroot_cleanImage
+        exit $SUCCESS
+    fi
+
     # print list on board and device configs that are supported with buildroot
-    if [ $LIST_FLAG = "true" ]; then
+    if $LIST_FLAG; then
 
         buildroot_printList
         exit ${SUCCESS}
 
     fi
 
-    if [ $BUILD_FLAG = "true" ]; then
+    if $BUILD_FLAG; then
 
         debug buildroot_isConfigValid $BUILDROOT_CONFIG
         echo_info "starting building image with buildroot"
