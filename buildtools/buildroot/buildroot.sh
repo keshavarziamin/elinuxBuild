@@ -81,7 +81,7 @@ function buildroot_buildKernel() {
 
 }
 
-function buildroot_run() {
+function buildroot_getopts() {
 
     # get arguments
     BR_VALID_ARGS=$(getopt -o lc: --long list,config: -- "$@")
@@ -141,10 +141,17 @@ function buildroot_run() {
         shift
     done
 
+}
+
+function buildroot_run() {
+
+    # get arguments
+    buildroot_getopts
+
     # goto to buildroot source code path
     cd ${BUILDROOT_SRC_DIR}
 
-    #print list on board and device configs that are supported with buildroot
+    # print list on board and device configs that are supported with buildroot
     if [ $LIST_FLAG = "true" ]; then
 
         buildroot_printList
@@ -156,7 +163,6 @@ function buildroot_run() {
 
         debug buildroot_isConfigValid $BUILDROOT_CONFIG
         echo_info "starting building image with buildroot"
-        print "df: $BUILDROOT_MENU\n"
         debug buildroot_buildKernel $BUILDROOT_CONFIG $BUILDROOT_MENU
 
     fi
