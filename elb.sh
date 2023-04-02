@@ -13,7 +13,7 @@ function usage() {
     echo "-B, --buildroot   Build the root filesystem"
     echo "-c, --config      Build the specified configuration"
     echo "-l, --list        List the supported configurations"
-    echo "-C, --clean       remove all output fiels and images
+    echo "-C, --clean       remove all output fiels and images"
     echo "menuconfig        Show menu configuration"
     echo
     echo "Examples:"
