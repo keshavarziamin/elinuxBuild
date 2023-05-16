@@ -2,7 +2,7 @@
 
 # Embedded Linux builder
 
-The Embedded Linux Builder (elinuxbuild) is an open-source project that uses Buildroot to build embedded Linux systems. Currently, the project focuses on making, building, and testing Linux images, packages, and libraries. In future versions, Yocto and manual building will also be supported.
+The Embedded Linux Builder (elinuxbuild) is an open-source project developed with bash to build embedded Linux systems. Currently, the project focuses on making, building, and testing Linux images, packages, and libraries. 
 
 ## Milestone
 |version|   status  |
@@ -35,4 +35,5 @@ Examples:
 ./elb.sh -B -l
 ./elb.sh -B --list
 ./elb.sh -B --clean
+
 ```
